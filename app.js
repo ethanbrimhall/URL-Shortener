@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const http = require('http');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const config = require('./config/database');
@@ -32,6 +33,24 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/:urlCode', (req, res) =>{
+  var urlCodePassed = String(req.params.urlCode);
+
+  Url.findOne({shortyCode:urlCodePassed}, (err, theUrl) =>{
+    if(err) throw err;
+
+    if(theUrl){
+      res.writeHead(301,
+      {Location: String(theUrl.urlAddress)}
+      );
+    res.end();
+    }else{
+      res.render("notFound");
+    }
+  });
+});
+
+
 app.get('/', (req, res) =>{
   res.render('index');
 });
@@ -39,6 +58,11 @@ app.get('/', (req, res) =>{
 app.post('/', (req, res) =>{
 
   var url = req.body.url;
+
+
+  if(!url.startsWith("http://") && !url.startsWith('https://')){
+    url = "http://" + String(url);
+  }
 
   Url.findOne({urlAddress:url}, (err, theUrl) => {
     if(err) throw err;
