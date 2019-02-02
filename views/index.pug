@@ -15,4 +15,5 @@ block content
     br
     h5
       small Your shortened URL: 
-        strong!= "localhost:3000/" + theUrl
+        strong
+          a(id="addressCopyLink" onclick="copyToClipboard()")!= "localhost:3000/" + theUrl
