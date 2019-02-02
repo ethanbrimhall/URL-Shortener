@@ -11,6 +11,8 @@ block content
       input.form-control(name='url', type='text' placeholder='Enter a URL to shorten')
     br
     input.btn.btn-primary(type='submit', value='Submit')
-  br
   if theUrl
-    h5!= "Your shortened URL: localhost:3000/" + theUrl
+    br
+    h5
+      small Your shortened URL: 
+        strong!= "localhost:3000/" + theUrl
